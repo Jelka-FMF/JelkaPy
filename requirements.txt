@@ -5,3 +5,4 @@ pyright
 pytest
 numpy
 pygame
+jelka_validator
