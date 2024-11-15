@@ -1,4 +1,4 @@
-from test.simulation import Simulation
+from simulation import Simulation
 
 from subprocess import Popen, PIPE
 import sys
@@ -9,7 +9,7 @@ from jelka_validator.datareader import DataReader
 if __name__ == "__main__":
     # Popen(["-m", "writer.py"], executable=sys.executable, stdout=PIPE)
     # Popen(["writer.exe"], stdout=PIPE)
-    with Popen(["-m", "test/vzorec.py"], executable=sys.executable, stdout=PIPE, bufsize=10000) as p:
+    with Popen([sys.executable, "vzorec.py"], stdout=PIPE, bufsize=10000) as p:
         sim = Simulation()
         dr = DataReader(p.stdout.read1)  # type: ignore
         dr.update()
