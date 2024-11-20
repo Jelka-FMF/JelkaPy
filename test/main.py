@@ -1,7 +1,7 @@
 from simulation import Simulation
 
 from subprocess import Popen, PIPE
-import sys
+import sys,os
 import time
 from jelka_validator.datareader import DataReader
 
@@ -9,8 +9,17 @@ from jelka_validator.datareader import DataReader
 if __name__ == "__main__":
     # Popen(["-m", "writer.py"], executable=sys.executable, stdout=PIPE)
     # Popen(["writer.exe"], stdout=PIPE)
-    with Popen([sys.executable, "vzorec.py"], stdout=PIPE, bufsize=10000) as p:
-        sim = Simulation()
+    smreka = {}
+    with open("lucke3d.csv") as f:
+        for line in f.readlines():
+            line = line.strip()
+            if line == "":
+                continue
+            i, x, y, z = line.split(",")
+            smreka[int(i)] = (float(x), float(y), float(z))
+
+    with Popen([sys.executable, "scan_z.py"], stdout=PIPE, bufsize=10000) as p:
+        sim = Simulation(smreka)
         dr = DataReader(p.stdout.read1)  # type: ignore
         dr.update()
         # assert dr.header is not None

@@ -1,5 +1,5 @@
 
 class Sphere:
     def __init__(self, radius):
-        self.radius = radiuss
+        self.radius = radius
     

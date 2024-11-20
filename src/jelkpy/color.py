@@ -1,4 +1,5 @@
 from typing import Tuple
+import random
 
 
 class Color:
@@ -43,3 +44,16 @@ class Color:
     def to_write(self)-> Tuple[int, int, int]:
         round_clamp = lambda value: max(0, min(255, round(value)))
         return round_clamp(self.r), round_clamp(self.g), round_clamp(self.b)
+    
+    def vivid(self):
+        """Makes color more vivid."""
+        m = min(self.r,self.g,self.b)
+        if self.r <= self.g and self.r <= self.b:
+            self.r = 0
+        elif self.g <= self.r and self.g <= self.b:
+            self.g = 0
+        else: self.b = 0
+        return self
+    
+    def random_color() -> 'Color':
+        return Color(random.uniform(0,255), random.uniform(0,255), random.uniform(0,255))
