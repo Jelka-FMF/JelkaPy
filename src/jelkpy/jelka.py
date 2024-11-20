@@ -1,5 +1,5 @@
 from .color import Color
-from typing import Callable
+from typing import Callable,List
 import jelka_validator.datawriter as dw
 import time
 
@@ -7,7 +7,7 @@ class Jelka:
     def __init__(self, n : int, frame_rate : int, color : Color = Color(0,0,0), file : str = "lucke3d.csv"):
         self.n = n
         self.color = color
-        self.lights = [color for _ in range(n)]
+        self.lights : List[Color] = [color for _ in range(n)]
         self.dw = dw.DataWriter()
         self.frame = 0
         self.frame_rate = frame_rate
@@ -34,7 +34,6 @@ class Jelka:
         max_y = max([pos[1] for pos in self.positions_raw.values()]) + 0.01
         min_z = min([pos[2] for pos in self.positions_raw.values()])
         max_z = max([pos[2] for pos in self.positions_raw.values()]) + 0.01
-        print("here")
         for i, pos in self.positions_raw.items():
             x = (pos[0] - min_x) / (max_x - min_x) * (r - l) + l
             y = (pos[1] - min_y) / (max_y - min_y) * (r - l) + l
@@ -52,10 +51,11 @@ class Jelka:
     def run(self, callback : Callable[['Jelka'], None]= None):
         t = 0.0
         dt = 1.0 / self.frame_rate
-        current_time = time.perf_counter()
 
         while True:
-            self.cur_time = time.perf_counter() - self.start_time
+            self.elapsed_time = time.perf_counter() - self.start_time
+            current_time = time.perf_counter()
+
             if callback is not None:
                 callback(self)
             else : break
@@ -63,7 +63,6 @@ class Jelka:
         
             new_time = time.perf_counter()
             frame_time = new_time - current_time
-            current_time = new_time
             self.frame += 1
 
             if frame_time <= dt:
