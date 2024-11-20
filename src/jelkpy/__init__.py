@@ -1,2 +1,2 @@
-from sphere import Sphere
+from .sphere import Sphere
 __all__ = ['Sphere']
