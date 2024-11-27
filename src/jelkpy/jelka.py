@@ -8,7 +8,7 @@ class Jelka:
         self.n = n
         self.color = color
         self.lights : List[Color] = [color for _ in range(n)]
-        self.dw = dw.DataWriter()
+        self.dw = dw.DataWriter(300)
         self.frame = 0
         self.frame_rate = frame_rate
         self.positions_raw = dict()
@@ -28,16 +28,19 @@ class Jelka:
         self.normalize_positions(0,1)
 
     def normalize_positions(self, l : int = 0, r : int = 1):
-        min_x = min([pos[0] for pos in self.positions_raw.values()])
-        max_x = max([pos[0] for pos in self.positions_raw.values()]) + 0.01 # to avoid division by zero
-        min_y = min([pos[1] for pos in self.positions_raw.values()])
-        max_y = max([pos[1] for pos in self.positions_raw.values()]) + 0.01
-        min_z = min([pos[2] for pos in self.positions_raw.values()])
-        max_z = max([pos[2] for pos in self.positions_raw.values()]) + 0.01
+        mn = min([pos[0] for pos in self.positions_raw.values()])
+        mn = min(min([pos[1] for pos in self.positions_raw.values()]),mn)
+        mn = min(min([pos[2] for pos in self.positions_raw.values()]),mn)
+        
+        mx = max([pos[0] for pos in self.positions_raw.values()])
+        mx = max(max([pos[1] for pos in self.positions_raw.values()]),mx)
+        mx = max(max([pos[2] for pos in self.positions_raw.values()]),mx)
+        mx += 0.01 # to avoid division by zero
+
         for i, pos in self.positions_raw.items():
-            x = (pos[0] - min_x) / (max_x - min_x) * (r - l) + l
-            y = (pos[1] - min_y) / (max_y - min_y) * (r - l) + l
-            z = (pos[2] - min_z) / (max_z - min_z) * (r - l) + l
+            x = (pos[0] - mn) / (mx - mn) * (r - l) + l
+            y = (pos[1] - mn) / (mx - mn) * (r - l) + l
+            z = (pos[2] - mn) / (mx - mn) * (r - l) + l
             self.positions_normalized[i] = (x, y, z)
 
 
