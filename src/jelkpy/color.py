@@ -47,13 +47,17 @@ class Color:
     
     def vivid(self):
         """Makes color more vivid."""
-        m = min(self.r,self.g,self.b)
-        if self.r <= self.g and self.r <= self.b:
-            self.r = 0
-        elif self.g <= self.r and self.g <= self.b:
-            self.g = 0
-        else: self.b = 0
-        return self
+        return Color.vivid(self)
     
     def random_color() -> 'Color':
         return Color(random.uniform(0,255), random.uniform(0,255), random.uniform(0,255))
+    
+    def vivid(c : 'Color') -> 'Color':
+        """Makes color more vivid."""
+        m = min(c.r,c.g,c.b)
+        if c.r <= c.g and c.r <= c.b:
+            c.r = 0
+        elif c.g <= c.r and c.g <= c.b:
+            c.g = 0
+        else: c.b = 0
+        return c

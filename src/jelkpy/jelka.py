@@ -70,7 +70,7 @@ class Jelka:
 
             if frame_time <= dt:
                 time.sleep(dt - frame_time)
-                print(f"FPS: 60")
+                print(f"FPS: {self.frame_rate}")
             else: 
                 #print(f"Frame rate is too slow: {frame_time}/ {dt}")
                 print(f"FPS: {int(1.0 / frame_time)}")
