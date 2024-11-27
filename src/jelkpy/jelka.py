@@ -27,15 +27,17 @@ class Jelka:
         
         self.normalize_positions(0,1)
 
-    def normalize_positions(self, l : int = 0, r : int = 1):
+    def normalize_positions(self, l : int = 0, r : int = 1, mn_ = None, mx_ = None):
         mn = min([pos[0] for pos in self.positions_raw.values()])
         mn = min(min([pos[1] for pos in self.positions_raw.values()]),mn)
         mn = min(min([pos[2] for pos in self.positions_raw.values()]),mn)
-        
+        if mn_ != None: mn = mn_
+
         mx = max([pos[0] for pos in self.positions_raw.values()])
         mx = max(max([pos[1] for pos in self.positions_raw.values()]),mx)
         mx = max(max([pos[2] for pos in self.positions_raw.values()]),mx)
         mx += 0.01 # to avoid division by zero
+        if mx_ != None: mx = mx_
 
         for i, pos in self.positions_raw.items():
             x = (pos[0] - mn) / (mx - mn) * (r - l) + l
@@ -51,9 +53,10 @@ class Jelka:
         writable = [light.to_write() for light in self.lights]
         self.dw.write_frame(writable)
 
-    def run(self, callback : Callable[['Jelka'], None]= None):
+    def run(self, callback : Callable[['Jelka'], None]= None, init : Callable[['Jelka'],None] = None):
         t = 0.0
         dt = 1.0 / self.frame_rate
+        if init != None: init(self)
 
         while True:
             self.elapsed_time = time.perf_counter() - self.start_time
