@@ -1,6 +1,6 @@
 from colorsys import hsv_to_rgb, rgb_to_hsv
 from typing import Tuple
-from jelka.jelka import Jelka,Color
+from jelka import Jelka,Color
 
 
 def callback(jelka: Jelka):

@@ -1,4 +1,4 @@
-from jelka.jelka import Jelka
+from jelka import Jelka
 from jelka.color import Color
 import math
 

@@ -1,4 +1,4 @@
-from jelka.jelka import Jelka,Color
+from jelka import Jelka,Color
 
 def init(jelka : Jelka):
     None

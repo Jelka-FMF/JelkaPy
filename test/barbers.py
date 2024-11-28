@@ -1,4 +1,4 @@
-from jelka.jelka import Jelka,Color
+from jelka import Jelka,Color
 import math
 from jelka.sphere import Sphere
 from jelka.types import Position

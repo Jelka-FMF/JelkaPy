@@ -1,5 +1,4 @@
-from jelka.jelka import Jelka
-from jelka.color import Color
+from jelka import Jelka,Color
 
 def callback(jelka: Jelka):
     jelka.set_light(0, color=Color(0, 255, 0))
