@@ -1,4 +1,4 @@
-from jelkpy.jelka import Jelka,Color
+from jelka.jelka import Jelka,Color
 
 
 def callback(jelka: Jelka):

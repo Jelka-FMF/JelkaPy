@@ -1,7 +1,7 @@
-from jelkpy.jelka import Jelka,Color
+from jelka.jelka import Jelka,Color
 import math
-from jelkpy.sphere import Sphere
-from jelkpy.types import Position
+from jelka.sphere import Sphere
+from jelka.types import Position
 
 def callback(jelka: Jelka):
     cols = [Color(255, 0, 0), Color(0, 0, 255), Color(255, 255, 255)]

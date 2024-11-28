@@ -1,5 +1,5 @@
-from jelkpy.jelka import Jelka
-from jelkpy.color import Color
+from jelka.jelka import Jelka
+from jelka.color import Color
 import math
 
 def callback(jelka: Jelka):

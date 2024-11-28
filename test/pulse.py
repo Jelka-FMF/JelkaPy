@@ -1,6 +1,6 @@
-from jelkpy.jelka import Jelka,Color
+from jelka.jelka import Jelka,Color
 import math
-from jelkpy.util import distance
+from jelka.util import distance
 
 def callback(jelka: Jelka):
     global col
