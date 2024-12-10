@@ -2,6 +2,7 @@ from .color import Color
 from typing import Callable,List
 import jelka_validator.datawriter as dw
 import time
+#from .sphere import Sphere
 
 class Jelka:
     def __init__(self, n : int, frame_rate : int, color : Color = Color(0,0,0), file : str = "lucke3d.csv"):
@@ -15,6 +16,8 @@ class Jelka:
         self.positions_normalized = dict()
         self.start_time = time.perf_counter()
         self.cur_time = 0
+        self.objects : List['Sphere'] = list()
+        self.clear = False
         for i in range(n): self.positions_raw[i] = (0,0,0)
 
         with open(file) as f:
@@ -57,11 +60,22 @@ class Jelka:
         t = 0.0
         dt = 1.0 / self.frame_rate
         if init != None: init(self)
-
+        self.start_time = time.perf_counter()
+        
         while True:
             self.elapsed_time = time.perf_counter() - self.start_time
             current_time = time.perf_counter()
 
+            if self.clear:
+                for i in range(self.n) : 
+                    self.set_light(i, Color(0,0,0))
+            #print(self.elapsed_time)
+            for obj in self.objects: 
+                obj.update_pos(self.elapsed_time)
+                for i in range(self.n):
+                    if obj.is_inside(self.positions_normalized[i]):
+                        self.set_light(i,Color(obj.color.r,obj.color.g,obj.color.b)) 
+            
             if callback is not None:
                 callback(self)
             else : break
@@ -73,9 +87,10 @@ class Jelka:
 
             if frame_time <= dt:
                 time.sleep(dt - frame_time)
-                print(f"FPS: {self.frame_rate}")
+                #print(f"FPS: {self.frame_rate}")
             else: 
                 #print(f"Frame rate is too slow: {frame_time}/ {dt}")
-                print(f"FPS: {int(1.0 / frame_time)}")
+                #print(f"FPS: {int(1.0 / frame_time)}")
+                pass
 
 
