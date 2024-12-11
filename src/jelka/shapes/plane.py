@@ -8,5 +8,5 @@ class Plane:
         normal: "Position | tuple[float, float, float]",
     ):
         self.center = Position(*center)
-        self.normal = Position(*center)
-        self.d = normal[0] * center[0] + normal[1] * center[1] + normal[2] * center[2]
+        self.normal = Position(*normal)
+        self.d = self.center.dot(self.normal)

@@ -63,12 +63,15 @@ class Color:
     def vivid(self):
         """Returns a vivid version of the color."""
 
-        if self.red <= self.green and self.red <= self.blue:
-            self.red = 0
-        elif self.green <= self.red and self.green <= self.blue:
-            self.green = 0
-        else:
-            self.blue = 0
+        minimal = min(self.red, self.green, self.blue)
+
+        # Remove the smallest component to make the color more vibrant
+        if self.red == minimal:
+            return Color(0, self.green, self.blue)
+        elif self.green == minimal:
+            return Color(self.red, 0, self.blue)
+        elif self.blue == minimal:
+            return Color(self.red, self.green, 0)
 
         return self
 

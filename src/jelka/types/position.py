@@ -31,6 +31,12 @@ class Position(Tuple[float, float, float]):
     def __truediv__(self, scalar: float) -> "Position":  # pyright: ignore[reportIncompatibleMethodOverride]
         return Position(self.x / scalar, self.y / scalar, self.z / scalar)
 
+    def __str__(self):
+        return f"Position({self.x}, {self.y}, {self.z})"
+
+    def __repr__(self):
+        return f"Position({self.x}, {self.y}, {self.z})"
+
     def dot(self, other: "Position") -> float:
         """Calculates the dot product of two positions."""
         return self.x * other.x + self.y * other.y + self.z * other.z

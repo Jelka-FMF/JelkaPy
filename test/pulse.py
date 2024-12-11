@@ -14,8 +14,8 @@ def callback(jelka: Jelka):
         color = Color.vivid(Color.random())
 
     sphere_center = Position(0.25, 0.25, 0.5)
-    rad2 = (math.e ** (math.sin(jelka.frame / 10))) / 3
-    rad1 = (math.e ** (math.cos(jelka.frame / 10))) / 3
+    rad2 = (math.e ** (math.sin(jelka.frame / jelka.frame_rate * 2))) / 3
+    rad1 = (math.e ** (math.cos(jelka.frame / jelka.frame_rate * 2))) / 3
 
     cnt = 0
 

@@ -17,7 +17,7 @@ def callback(jelka: Jelka):
 
 
 def main():
-    jelka = Jelka(60, Color(255, 0, 0))
+    jelka = Jelka(60)
     jelka.run(callback)
 
 

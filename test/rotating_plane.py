@@ -13,18 +13,19 @@ c2: Color
 def callback(jelka: Jelka):
     global c1, c2
 
-    plane = Plane((0.5, 0.5, 0.5), (math.sin(jelka.frame / 40), 0, math.cos(jelka.frame / 40)))
+    plane = Plane(jelka.center_normalized, (math.sin(jelka.frame / 40), 0, math.cos(jelka.frame / 40)))
     threshold = 0.1
 
     if jelka.frame % 150 == 0:
         c1 = Color.random().vivid()
         c1hsv = rgb_to_hsv(c1.red / 255.0, c1.green / 255.9, c1.green / 255.0)
-        c2hsv = ((c1hsv[0] * 360 + random.randint(80, 280) % 360) / 360.0, c1hsv[1], c1hsv[2])
+        c2hsv = ((c1hsv[0] * 360 + random.randint(100, 200) % 360) / 360.0, c1hsv[1], c1hsv[2])
         conv = hsv_to_rgb(*c2hsv)
         c2 = Color(conv[0] * 255, conv[1] * 255, conv[2] * 255).vivid()
 
     for light, position in jelka.positions_normalized.items():
-        dcrtica = position[0] * plane.normal[0] + position[1] * plane.normal[1] + position[2] * plane.normal[2]
+        dcrtica = position.dot(plane.normal)
+
         if plane.d - threshold <= dcrtica <= plane.d + threshold:
             jelka.set_light(light, c1)
         else:

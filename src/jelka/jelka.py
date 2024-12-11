@@ -38,6 +38,12 @@ class Jelka:
         self.positions_normalized: Dict[int, Position] = dict()
         """Normalized positions of the lights."""
 
+        self.center_raw: Position = Position(0, 0, 0)
+        """Center of the tree in raw coordinates."""
+
+        self.center_normalized: Position = Position(0, 0, 0)
+        """Center of the tree in normalized coordinates."""
+
         # Provide default file locations
         filenames = [
             os.path.join(os.getcwd(), "positions.csv"),
@@ -85,12 +91,18 @@ class Jelka:
             with open(filename) as file:
                 print(f"Loading positions from {filename}", file=sys.stderr, flush=True)
 
+                # Read the positions from the file
                 for line in file.readlines():
                     line = line.strip()
                     if line == "":
                         continue
                     i, x, y, z = line.split(",")
                     self.positions_raw[int(i)] = Position(float(x), float(y), float(z))
+
+                # Calculate the center of the tree
+                minz = min([pos.z for pos in self.positions_raw.values()])
+                maxz = max([pos.z for pos in self.positions_raw.values()])
+                self.center_raw = Position(0, 0, (minz + maxz) / 2)
 
                 return
 
@@ -115,6 +127,12 @@ class Jelka:
             y = (pos.y - mn) / (mx - mn) * (r - l) + l
             z = (pos.z - mn) / (mx - mn) * (r - l) + l
             self.positions_normalized[i] = Position(x, y, z)
+
+        self.center_normalized = Position(
+            (self.center_raw.x - mn) / (mx - mn) * (r - l) + l,
+            (self.center_raw.y - mn) / (mx - mn) * (r - l) + l,
+            (self.center_raw.z - mn) / (mx - mn) * (r - l) + l,
+        )
 
     def set_light(self, i: int, color: Color):
         """Sets the color of the specified light."""

@@ -3,7 +3,7 @@ from jelka.types import Color
 
 
 color: Color = Color.random().vivid()
-spawn_rate: int = 25
+spawn_rate: int = 40
 line_length: int = 10
 
 
@@ -23,7 +23,7 @@ def callback(jelka: Jelka):
 
 
 def main():
-    jelka = Jelka(30)
+    jelka = Jelka(40)
     jelka.run(callback)
 
 
