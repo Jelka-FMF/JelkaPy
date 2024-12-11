@@ -2,10 +2,10 @@ from .color import Color
 from typing import Callable,List
 import jelka_validator.datawriter as dw
 import time
-#from .sphere import Sphere
+import sys, os
 
 class Jelka:
-    def __init__(self, n : int, frame_rate : int, color : Color = Color(0,0,0), file : str = "lucke3d.csv"):
+    def __init__(self, n : int, frame_rate : int, color : Color = Color(0,0,0), file : str | None = None):
         self.n = n
         self.color = color
         self.lights : List[Color] = [color for _ in range(n)]
@@ -20,15 +20,44 @@ class Jelka:
         self.clear = False
         for i in range(n): self.positions_raw[i] = (0,0,0)
 
-        with open(file) as f:
-            for line in f.readlines():
-                line = line.strip()
-                if line == "":
-                    continue
-                i, x, y, z = line.split(",")
-                self.positions_raw[int(i)] = (float(x), float(y), float(z))
+        filenames = []
         
+        if file:
+            # Allow specifying custom path
+            filenames.append(file)
+
+        # Provide default file locations
+        filenames.append(os.path.join(os.getcwd(), 'positions.csv'))
+        filenames.append(os.path.join(os.path.dirname(sys.argv[0]), 'positions.csv'))
+        filenames.append(os.path.join(os.getcwd(), '../data/positions.csv'))
+        filenames.append(os.path.join(os.path.dirname(sys.argv[0]), '../data/positions.csv'))
+        
+        # Try to load positions from various files
+        self.load_positions(filenames)
+
+        # Normalize the positions
         self.normalize_positions(0,1)
+
+    def load_positions(self, filenames: List[str]):
+        """Loads positions from the first available file."""
+        
+        for filename in filenames:
+            if not os.path.isfile(filename):
+                continue
+            
+            with open(filename) as file:
+                print(f"Loading positions from {filename}", file=sys.stderr, flush=True)
+
+                for line in file.readlines():
+                    line = line.strip()
+                    if line == "":
+                        continue
+                    i, x, y, z = line.split(",")
+                    self.positions_raw[int(i)] = (float(x), float(y), float(z))
+                
+                return
+
+        raise FileNotFoundError("No valid file found to load positions from")
 
     def normalize_positions(self, l : int = 0, r : int = 1, mn_ = None, mx_ = None):
         mn = min([pos[0] for pos in self.positions_raw.values()])

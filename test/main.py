@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # Popen(["-m", "writer.py"], executable=sys.executable, stdout=PIPE)
     # Popen(["writer.exe"], stdout=PIPE)
     smreka = {}
-    with open("lucke3d.csv") as f:
+    with open("positions.csv") as f:
         for line in f.readlines():
             line = line.strip()
             if line == "":
