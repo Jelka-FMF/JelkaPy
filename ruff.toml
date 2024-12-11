@@ -37,6 +37,9 @@ indent-width = 4
 # Add the `line-too-long` rule to the enforced rule set.
 extend-select = ["E501"]
 
+# Remove the 'ambiguous-variable-name' rule from the enforced rule set.
+extend-ignore = ["E741"]
+
 [format]
 # Like Black, use double quotes for strings.
 quote-style = "double"

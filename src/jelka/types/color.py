@@ -1,0 +1,78 @@
+import random
+from typing import List, Tuple
+
+
+class Color:
+    """Represents an RGB color."""
+
+    def __init__(self, red: float, green: float, blue: float):
+        self.red = red
+        self.green = green
+        self.blue = blue
+
+    def __add__(self, other: "Color") -> "Color":
+        return Color(self.red + other.red, self.green + other.green, self.blue + other.blue)
+
+    def __sub__(self, other: "Color") -> "Color":
+        return Color(self.red - other.red, self.green - other.green, self.blue - other.blue)
+
+    def __mul__(self, other: "Color | int | float") -> "Color":
+        if isinstance(other, Color):
+            return Color(self.red * other.red, self.green * other.green, self.blue * other.blue)
+        elif isinstance(other, (int, float)):
+            return Color(self.red * other, self.green * other, self.blue * other)
+
+        raise TypeError("Unsupported operand type(s) for *: 'Color' and '{}'".format(type(other).__name__))
+
+    def __truediv__(self, other: "Color | int | float") -> "Color":
+        if isinstance(other, Color):
+            return Color(self.red / other.red, self.green / other.green, self.blue / other.blue)
+        elif isinstance(other, (int, float)):
+            return Color(self.red / other, self.green / other, self.blue / other)
+
+        raise TypeError("Unsupported operand type(s) for /: 'Color' and '{}'".format(type(other).__name__))
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Color):
+            return False
+
+        return self.red == other.red and self.green == other.green and self.blue == other.blue
+
+    def __str__(self) -> str:
+        return f"Color({self.red}, {self.green}, {self.blue})"
+
+    def __repr__(self) -> str:
+        return f"Color({self.red}, {self.green}, {self.blue})"
+
+    def to_tuple(self) -> Tuple[float, float, float]:
+        """Returns the color as a tuple of floats."""
+        return self.red, self.green, self.blue
+
+    def to_list(self) -> List[float]:
+        """Returns the color as a list of floats."""
+        return [self.red, self.green, self.blue]
+
+    def to_write(self) -> Tuple[int, int, int]:
+        """Returns the color in a format for the data writer."""
+
+        def round_clamp(value):
+            return max(0, min(255, round(value)))
+
+        return round_clamp(self.red), round_clamp(self.green), round_clamp(self.blue)
+
+    def vivid(self):
+        """Returns a vivid version of the color."""
+
+        if self.red <= self.green and self.red <= self.blue:
+            self.red = 0
+        elif self.green <= self.red and self.green <= self.blue:
+            self.green = 0
+        else:
+            self.blue = 0
+
+        return self
+
+    @staticmethod
+    def random() -> "Color":
+        """Returns a random color."""
+        return Color(random.uniform(0, 255), random.uniform(0, 255), random.uniform(0, 255))
