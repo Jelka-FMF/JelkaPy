@@ -11,7 +11,7 @@ class Jelka:
         self.n = n
         self.color = color
         self.lights: List[Color] = [color for _ in range(n)]
-        self.dw = dw.DataWriter(300)
+        self.dw = dw.DataWriter(n)
         self.frame = 0
         self.frame_rate = frame_rate
         self.positions_raw = dict()

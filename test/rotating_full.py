@@ -33,7 +33,7 @@ def callback(jelka: Jelka):
 
 
 def main():
-    jelka = Jelka(300, 60)
+    jelka = Jelka(500, 60)
     jelka.run(callback, init)
 
 
