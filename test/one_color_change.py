@@ -1,6 +1,5 @@
 from colorsys import hsv_to_rgb, rgb_to_hsv
-from typing import Tuple
-from jelka import Jelka,Color
+from jelka import Jelka, Color
 
 
 def callback(jelka: Jelka):
@@ -12,8 +11,10 @@ def callback(jelka: Jelka):
         color = tuple(map(lambda x: int(x * 255), color))
         jelka.set_light(i, Color(color[0], color[1], color[2]))
 
+
 def main():
     jelka = Jelka(300, 60)
     jelka.run(callback)
+
 
 main()

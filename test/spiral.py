@@ -1,8 +1,9 @@
-from jelka import Jelka,Color
+from jelka import Jelka, Color
 from jelka.sphere import Sphere
 import math
 
-def init(jelka : Jelka):
+
+def init(jelka: Jelka):
     global normalized
     normalized = [0] * jelka.n
 
@@ -13,13 +14,15 @@ def init(jelka : Jelka):
     min_z = min([jelka.positions_raw[i][2] for i in range(jelka.n)])
     max_z = max([jelka.positions_raw[i][2] for i in range(jelka.n)])
     for i in range(len(normalized)):
-        normalized[i] = ((jelka.positions_raw[i][0] - min_x) / (max_x - min_x + 0.01),
-                         (jelka.positions_raw[i][1] - min_y) / (max_y - min_y + 0.01),
-                         (jelka.positions_raw[i][2] - min_z) / (max_z - min_z + 0.01))
-    
+        normalized[i] = (
+            (jelka.positions_raw[i][0] - min_x) / (max_x - min_x + 0.01),
+            (jelka.positions_raw[i][1] - min_y) / (max_y - min_y + 0.01),
+            (jelka.positions_raw[i][2] - min_z) / (max_z - min_z + 0.01),
+        )
+
 
 def callback(jelka: Jelka):
-    global col 
+    global col
 
     height = 1 - 0.0075 * (jelka.frame % 150)
     if height == 1:
@@ -34,12 +37,13 @@ def callback(jelka: Jelka):
         pos = normalized[i]
         if sph.is_inside(pos):
             jelka.set_light(i, col)
-        #else:
-         #   jelka.set_light(i, Color(0, 0, 0))
+        # else:
+        #   jelka.set_light(i, Color(0, 0, 0))
+
 
 def main():
     jelka = Jelka(300, 60)
-    jelka.run(callback,init)
+    jelka.run(callback, init)
+
 
 main()
-

@@ -1,7 +1,7 @@
 from simulation import Simulation
 
 from subprocess import Popen, PIPE
-import sys,os
+import sys
 import time
 from jelka_validator.datareader import DataReader
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         time.sleep(1)
         while sim.running:
             c = next(dr)
-            #assert all(c[i] == c[0] for i in range(len(c)))
+            # assert all(c[i] == c[0] for i in range(len(c)))
             dr.user_print()
             sim.set_colors(dict(zip(range(len(c)), c)))
             sim.frame()
