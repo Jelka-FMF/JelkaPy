@@ -1,4 +1,5 @@
-from jelka import Jelka, Color
+from jelka import Jelka
+from jelka.types import Color
 
 
 def callback(jelka: Jelka):
@@ -9,7 +10,7 @@ def callback(jelka: Jelka):
 
 
 def main():
-    jelka = Jelka(300, 60, Color(255, 0, 0))
+    jelka = Jelka(60)
     jelka.run(callback)
 
 

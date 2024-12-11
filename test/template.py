@@ -2,15 +2,15 @@ from jelka import Jelka
 
 
 def init(jelka: Jelka):
-    None
+    pass
 
 
 def callback(jelka: Jelka):
-    None
+    pass
 
 
 def main():
-    jelka = Jelka(300, 60)
+    jelka = Jelka(60)
     jelka.run(callback, init)
 
 

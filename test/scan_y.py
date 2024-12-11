@@ -1,27 +1,37 @@
-from jelka import Jelka, Color
-import math
+from jelka import Jelka
+from jelka.types import Color
 
 axis = 1
-threshold = 0.2
+threshold = 0.05
+dimmer = 0.2
+
+color: Color
+
+
+def wave(x: float, low: float = -0.2, high: float = 1.2) -> float:
+    return 2 * (high - low) * abs(x - round(x)) + low
 
 
 def init(jelka: Jelka):
-    mx = max([x for x in jelka.positions_raw[1]])
-    mn = min([x for x in jelka.positions_raw[1]])
+    mx = max([pos[axis] for pos in jelka.positions_raw.values()])
+    mn = min([pos[axis] for pos in jelka.positions_raw.values()])
     jelka.normalize_positions(0, 1, mn, mx)
 
 
 def callback(jelka: Jelka):
-    if jelka.frame % 300 == 0:
-        jelka.color = Color.random_color().vivid()
+    global color
 
-    coord = math.sin(jelka.frame / 20) / 1 + 0.55
-    for i in range(jelka.n):
-        jelka.set_light(i, jelka.color if abs(jelka.positions_normalized[i][axis] - coord) < threshold else jelka.color * 0.3)
+    if jelka.frame % 300 == 0:
+        color = Color.random().vivid()
+
+    coord = wave(jelka.frame / jelka.frame_rate / 4)
+
+    for light, position in jelka.positions_normalized.items():
+        jelka.set_light(light, color if abs(position[axis] - coord) < threshold else color * dimmer)
 
 
 def main():
-    jelka = Jelka(300, 60)
+    jelka = Jelka(60)
     jelka.run(callback, init)
 
 

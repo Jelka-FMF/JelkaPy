@@ -1,28 +1,29 @@
-from jelka import Jelka, Color
+from jelka import Jelka
+from jelka.types import Color
+
+
+color: Color = Color.random().vivid()
+spawn_rate: int = 25
+line_length: int = 10
 
 
 def callback(jelka: Jelka):
-    if jelka.frame == 0:
-        global col
-        global spawnRate
-        global lineLength
-        col = Color.vivid(Color.random_color())
-        spawnRate = 25
-        lineLength = 10
-        jelka.frame_rate = 8
+    global color
+    global spawn_rate
+    global line_length
 
-    if (jelka.frame % spawnRate) < lineLength:
-        jelka.set_light(0, color=col)
+    if (jelka.frame % spawn_rate) < line_length:
+        jelka.set_light(0, color=color)
     else:
         jelka.set_light(0, color=Color(0, 0, 0))
-        col = Color.vivid(Color.random_color())
+        color = Color.random().vivid()
 
-    for i in reversed(range(1, jelka.n)):
+    for i in reversed(range(1, jelka.number_of_lights)):
         jelka.set_light(i, jelka.lights[i - 1])
 
 
 def main():
-    jelka = Jelka(300, 60)
+    jelka = Jelka(30)
     jelka.run(callback)
 
 
