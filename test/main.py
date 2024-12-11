@@ -18,7 +18,7 @@ if __name__ == "__main__":
             i, x, y, z = line.split(",")
             smreka[int(i)] = (float(x), float(y), float(z))
 
-    with Popen([sys.executable, "rain.py"], stdout=PIPE, bufsize=10000) as p:
+    with Popen([sys.executable, "spiral.py"], stdout=PIPE, bufsize=10000) as p:
         sim = Simulation(smreka)
         dr = DataReader(p.stdout.read1)  # type: ignore
         dr.update()
