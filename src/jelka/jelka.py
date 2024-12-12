@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Union
 
 import jelka_validator.datawriter as dw
 
@@ -17,8 +17,8 @@ class Jelka:
         self,
         frame_rate: int = 60,
         initial_color: Color = Color(0, 0, 0),
-        number_of_lights: int | None = None,
-        custom_positions: str | None = None,
+        number_of_lights: Union[int, None] = None,
+        custom_positions: Union[str, None] = None,
     ):
         self.frame_rate: int = frame_rate
         """Frame rate of the pattern."""
@@ -48,8 +48,8 @@ class Jelka:
         filenames = [
             os.path.join(os.getcwd(), "positions.csv"),
             os.path.join(os.path.dirname(sys.argv[0]), "positions.csv"),
-            os.path.join(os.getcwd(), "../data/positions.csv"),
-            os.path.join(os.path.dirname(sys.argv[0]), "../data/positions.csv"),
+            os.path.join(os.getcwd(), "../../data/positions.csv"),
+            os.path.join(os.path.dirname(sys.argv[0]), "../../data/positions.csv"),
         ]
 
         # Allow specifying a custom path
@@ -72,7 +72,7 @@ class Jelka:
         self.lights: List[Color] = [initial_color for _ in range(number_of_lights)]
         """List of colors of the lights."""
 
-        self.objects: List["Shape"] = []
+        self.objects: List[Shape] = []
         """List of objects in the scene."""
 
         self.dw = dw.DataWriter(number_of_lights)
@@ -89,7 +89,7 @@ class Jelka:
                 continue
 
             with open(filename) as file:
-                print(f"Loading positions from {filename}", file=sys.stderr, flush=True)
+                print(f"[LIBRARY] Loading positions from '{filename}'.", file=sys.stderr, flush=True)
 
                 # Read the positions from the file
                 for line in file.readlines():
@@ -106,9 +106,15 @@ class Jelka:
 
                 return
 
-        raise FileNotFoundError("No valid file found to load positions from")
+        raise FileNotFoundError("[LIBRARY] No valid file found to load positions from.")
 
-    def normalize_positions(self, l: int = 0, r: int = 1, mn: "int | float | None" = None, mx: "int | float | None" = None):
+    def normalize_positions(
+        self,
+        l: int = 0,
+        r: int = 1,
+        mn: Union[int, float, None] = None,
+        mx: Union[int, float, None] = None,
+    ):
         """Normalizes the positions to the range [l, r]."""
 
         if mn is None:
@@ -138,12 +144,15 @@ class Jelka:
         """Sets the color of the specified light."""
         self.lights[i] = color
 
-    def run(self, callback: Callable[["Jelka"], None] | None = None, init: Callable[["Jelka"], None] | None = None):
+    def run(self, callback: Union[Callable[["Jelka"], None], None] = None, init: Union[Callable[["Jelka"], None], None] = None):
         """Runs the main loop of the tree."""
 
         # Call the init function
         if init is not None:
+            print("[LIBRARY] Running the init function.", file=sys.stderr, flush=True)
             init(self)
+
+        print("[LIBRARY] Starting the main loop.", file=sys.stderr, flush=True)
 
         self.start_time = time.perf_counter()
 
@@ -181,6 +190,5 @@ class Jelka:
             if frame_time <= dt:
                 time.sleep(dt - frame_time)
             else:
-                print("Warning: Cannot keep up with the frame rate", file=sys.stderr, flush=True)
-                print(f"Frame time: {frame_time}, Max frame time: {dt}", file=sys.stderr, flush=True)
-                pass
+                print("[LIBRARY] Warning: Cannot keep up with the frame rate.", file=sys.stderr, flush=True)
+                print(f"[LIBRARY] Frame time: {frame_time}, Max frame time: {dt}", file=sys.stderr, flush=True)

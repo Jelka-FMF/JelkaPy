@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 
 class Color:
@@ -16,7 +16,7 @@ class Color:
     def __sub__(self, other: "Color") -> "Color":
         return Color(self.red - other.red, self.green - other.green, self.blue - other.blue)
 
-    def __mul__(self, other: "Color | int | float") -> "Color":
+    def __mul__(self, other: Union["Color", int, float]) -> "Color":
         if isinstance(other, Color):
             return Color(self.red * other.red, self.green * other.green, self.blue * other.blue)
         elif isinstance(other, (int, float)):
@@ -24,7 +24,7 @@ class Color:
 
         raise TypeError("Unsupported operand type(s) for *: 'Color' and '{}'".format(type(other).__name__))
 
-    def __truediv__(self, other: "Color | int | float") -> "Color":
+    def __truediv__(self, other: Union["Color", int, float]) -> "Color":
         if isinstance(other, Color):
             return Color(self.red / other.red, self.green / other.green, self.blue / other.blue)
         elif isinstance(other, (int, float)):
