@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple
 
 from ..types import Position
 
@@ -6,8 +6,8 @@ from ..types import Position
 class Plane:
     def __init__(
         self,
-        center: Union[Position, tuple[float, float, float]],
-        normal: Union[Position, tuple[float, float, float]],
+        center: Union[Position, Tuple[float, float, float]],
+        normal: Union[Position, Tuple[float, float, float]],
     ):
         self.center = Position(*center)
         self.normal = Position(*normal)

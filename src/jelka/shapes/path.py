@@ -1,5 +1,5 @@
 import math
-from typing import List, Union
+from typing import List, Tuple, Union
 
 from ..types import Position
 
@@ -12,7 +12,7 @@ class Path:
         self.durations: List[float] = []
         self.loop = True
 
-    def add_position(self, position: Union[Position, tuple[float, float, float]], time: float):
+    def add_position(self, position: Union[Position, Tuple[float, float, float]], time: float):
         """Adds a position to the path."""
 
         self.positions.append(Position(*position))

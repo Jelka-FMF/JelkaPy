@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Tuple
 
 from .path import Path
 from .shape import Shape
@@ -9,7 +9,7 @@ from ..util import distance
 class Sphere(Shape):
     def __init__(
         self,
-        center: Union[Position, tuple[float, float, float]],
+        center: Union[Position, Tuple[float, float, float]],
         radius: float,
         color: Color = Color(255, 192, 203),
     ):
