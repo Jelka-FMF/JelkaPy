@@ -56,6 +56,9 @@ class Jelka:
         if custom_positions:
             filenames = [custom_positions]
 
+        # Resolve relative paths to absolute paths
+        filenames = [os.path.abspath(filename) for filename in filenames]
+
         # Try to load positions from various files
         self.load_positions(filenames)
 
@@ -106,7 +109,7 @@ class Jelka:
 
                 return
 
-        raise FileNotFoundError("[LIBRARY] No valid file found to load positions from.")
+        raise FileNotFoundError(f"[LIBRARY] No valid file found to load positions from (attempted: {filenames}).")
 
     def normalize_positions(
         self,

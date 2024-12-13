@@ -4,20 +4,27 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jelka"
+description = "Python API for Jelka FMF patterns"
 version = "0.0.4"
-authors = [
-  { name="Bor Brudar", email="bor.brudar@gmail.com" },
-]
-description = "API"
-readme = "PackageREADME.md"
+readme = "README.md"
+
 requires-python = ">=3.8"
-dependencies = [
-  "jelka-validator"
+
+authors = [
+    { name = "Bor Brudar", email = "bor.brudar@gmail.com" },
+    { name = "Filip Štamcar", email = "projects@filips.si" },
 ]
+
+dependencies = [
+    "jelka-validator",
+]
+
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Typing :: Typed",
 ]
 
 [project.urls]
