@@ -2,21 +2,31 @@ import random
 from typing import List, Tuple, Union
 
 
-class Color:
+class Color(Tuple[float, float, float]):
     """Represents an RGB color."""
 
-    def __init__(self, red: float, green: float, blue: float):
-        self.red = red
-        self.green = green
-        self.blue = blue
+    def __new__(cls, red: float, green: float, blue: float):
+        return super().__new__(cls, (red, green, blue))
 
-    def __add__(self, other: "Color") -> "Color":
+    @property
+    def red(self) -> float:
+        return self[0]
+
+    @property
+    def green(self) -> float:
+        return self[1]
+
+    @property
+    def blue(self) -> float:
+        return self[2]
+
+    def __add__(self, other: "Color") -> "Color":  # pyright: ignore[reportIncompatibleMethodOverride]
         return Color(self.red + other.red, self.green + other.green, self.blue + other.blue)
 
-    def __sub__(self, other: "Color") -> "Color":
+    def __sub__(self, other: "Color") -> "Color":  # pyright: ignore[reportIncompatibleMethodOverride]
         return Color(self.red - other.red, self.green - other.green, self.blue - other.blue)
 
-    def __mul__(self, other: Union["Color", int, float]) -> "Color":
+    def __mul__(self, other: Union["Color", int, float]) -> "Color":  # pyright: ignore[reportIncompatibleMethodOverride]
         if isinstance(other, Color):
             return Color(self.red * other.red, self.green * other.green, self.blue * other.blue)
         elif isinstance(other, (int, float)):
@@ -24,7 +34,7 @@ class Color:
 
         raise TypeError("Unsupported operand type(s) for *: 'Color' and '{}'".format(type(other).__name__))
 
-    def __truediv__(self, other: Union["Color", int, float]) -> "Color":
+    def __truediv__(self, other: Union["Color", int, float]) -> "Color":  # pyright: ignore[reportIncompatibleMethodOverride]
         if isinstance(other, Color):
             return Color(self.red / other.red, self.green / other.green, self.blue / other.blue)
         elif isinstance(other, (int, float)):

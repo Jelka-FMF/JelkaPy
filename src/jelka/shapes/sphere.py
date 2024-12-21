@@ -1,9 +1,8 @@
-from typing import Union, Tuple
+from typing import Tuple, Union
 
 from .path import Path
 from .shape import Shape
 from ..types import Color, Position
-from ..util import distance
 
 
 class Sphere(Shape):
@@ -21,7 +20,7 @@ class Sphere(Shape):
         self.path.add_position(self.center, 0.01)
 
     def is_inside(self, position: Position) -> bool:
-        return distance(self.center, position) <= self.radius
+        return (self.center - position).magnitude() <= self.radius
 
     def update_position(self, time: float):
         self.center = self.path.current_position(time)

@@ -1,11 +1,13 @@
+from typing import Tuple, Union
+
 from .types import Position
 
 
-def length(position: Position) -> float:
+def length(position: Union[Position, Tuple[float, float, float]]) -> float:
     """Calculates an absolute value of a point."""
-    return position.magnitude()
+    return Position(*position).magnitude()
 
 
-def distance(p1: Position, p2: Position) -> float:
+def distance(p1: Union[Position, Tuple[float, float, float]], p2: Union[Position, Tuple[float, float, float]]) -> float:
     """Calculates a distance between two points."""
-    return (p1 - p2).magnitude()
+    return (Position(*p1) - Position(*p2)).magnitude()
