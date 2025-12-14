@@ -19,6 +19,7 @@ class Jelka:
         initial_color: Color = Color(0, 0, 0),
         number_of_lights: Union[int, None] = None,
         custom_positions: Union[str, None] = None,
+        frame_time_warrning: bool = True
     ):
         self.frame_rate: int = frame_rate
         """Frame rate of the pattern."""
@@ -83,6 +84,9 @@ class Jelka:
 
         self.clear = False
         """Whether to clear the lights before each frame."""
+
+        self.frame_time_warrning = frame_time_warrning
+        """ Wether to show frame time error messages"""
 
     def load_positions(self, filenames: List[str]):
         """Loads positions from the first available file."""
@@ -192,6 +196,6 @@ class Jelka:
 
             if frame_time <= dt:
                 time.sleep(dt - frame_time)
-            else:
+            elif self.frame_time_warrning:
                 print("[LIBRARY] Warning: Cannot keep up with the frame rate.", file=sys.stderr, flush=True)
                 print(f"[LIBRARY] Frame time: {frame_time}, Max frame time: {dt}", file=sys.stderr, flush=True)
