@@ -19,7 +19,7 @@ class Jelka:
         initial_color: Color = Color(0, 0, 0),
         number_of_lights: Union[int, None] = None,
         custom_positions: Union[str, None] = None,
-        frame_time_warrning: bool = True
+        frame_time_warning: bool = True,
     ):
         self.frame_rate: int = frame_rate
         """Frame rate of the pattern."""
@@ -85,8 +85,8 @@ class Jelka:
         self.clear = False
         """Whether to clear the lights before each frame."""
 
-        self.frame_time_warrning = frame_time_warrning
-        """ Wether to show frame time error messages"""
+        self.frame_time_warning = frame_time_warning
+        """Whether to show warning if frame time exceeds the limit."""
 
     def load_positions(self, filenames: List[str]):
         """Loads positions from the first available file."""
@@ -161,11 +161,13 @@ class Jelka:
 
         print("[LIBRARY] Starting the main loop.", file=sys.stderr, flush=True)
 
+        target_time = 10**9 / self.frame_rate
+
         self.start_time = time.perf_counter()
 
         while True:
             self.elapsed_time = time.perf_counter() - self.start_time
-            current_time = time.perf_counter()
+            current_time = time.perf_counter_ns()
 
             # Clear the lights if needed
             if self.clear:
@@ -188,14 +190,20 @@ class Jelka:
             writable = [light.to_write() for light in self.lights]
             self.dw.write_frame(writable)
 
-            new_time = time.perf_counter()
+            new_time = time.perf_counter_ns()
             frame_time = new_time - current_time
             self.frame += 1
 
-            dt = 1.0 / self.frame_rate
-
-            if frame_time <= dt:
-                time.sleep(dt - frame_time)
-            elif self.frame_time_warrning:
-                print("[LIBRARY] Warning: Cannot keep up with the frame rate.", file=sys.stderr, flush=True)
-                print(f"[LIBRARY] Frame time: {frame_time}, Max frame time: {dt}", file=sys.stderr, flush=True)
+            if frame_time <= target_time:
+                time.sleep((target_time - frame_time) / 10**9)
+            elif self.frame_time_warning:
+                print(
+                    f"[LIBRARY] Warning: Cannot keep up with the frame rate in frame {self.frame}.",
+                    file=sys.stderr,
+                    flush=True,
+                )
+                print(
+                    f"[LIBRARY] Frame time: {frame_time / 10**9}, Max frame time: {target_time / 10**9}",
+                    file=sys.stderr,
+                    flush=True,
+                )
