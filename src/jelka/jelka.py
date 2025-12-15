@@ -53,6 +53,10 @@ class Jelka:
             os.path.join(os.path.dirname(sys.argv[0]), "../../data/positions.csv"),
         ]
 
+        # Allow overriding positions file via environment variable
+        if environment_positions := os.getenv("JELKA_POSITIONS"):
+            filenames = [environment_positions]
+
         # Allow specifying a custom path
         if custom_positions:
             filenames = [custom_positions]
@@ -161,8 +165,6 @@ class Jelka:
 
         print("[LIBRARY] Starting the main loop.", file=sys.stderr, flush=True)
 
-        target_time = 10**9 / self.frame_rate
-
         self.start_time = time.perf_counter()
 
         while True:
@@ -192,18 +194,20 @@ class Jelka:
 
             new_time = time.perf_counter_ns()
             frame_time = new_time - current_time
-            self.frame += 1
+            target_time = 10**9 / self.frame_rate
 
             if frame_time <= target_time:
                 time.sleep((target_time - frame_time) / 10**9)
             elif self.frame_time_warning:
                 print(
-                    f"[LIBRARY] Warning: Cannot keep up with the frame rate in frame {self.frame}.",
+                    f"[LIBRARY] Warning: Cannot keep up with the frame rate during the frame {self.frame}.",
                     file=sys.stderr,
                     flush=True,
                 )
                 print(
-                    f"[LIBRARY] Frame time: {frame_time / 10**9}, Max frame time: {target_time / 10**9}",
+                    f"[LIBRARY] Frame time: {frame_time} ns, Max frame time: {target_time} ns",
                     file=sys.stderr,
                     flush=True,
                 )
+
+            self.frame += 1
