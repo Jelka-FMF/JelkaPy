@@ -53,21 +53,22 @@ class Jelka:
         self.center_normalized: Position = Position(0, 0, 0)
         """Center of the tree in normalized coordinates."""
 
-        # Provide default file locations
-        filenames = [
-            os.path.join(os.getcwd(), "positions.csv"),
-            os.path.join(os.path.dirname(sys.argv[0]), "positions.csv"),
-            os.path.join(os.getcwd(), "../../data/positions.csv"),
-            os.path.join(os.path.dirname(sys.argv[0]), "../../data/positions.csv"),
-        ]
+        if custom_positions:
+            # Use a custom positions file if provided
+            filenames = [custom_positions]
 
-        # Allow overriding positions file via environment variable
-        if environment_positions := os.getenv("JELKA_POSITIONS"):
+        elif environment_positions := os.getenv("JELKA_POSITIONS"):
+            # Use positions file from environment variable if provided
             filenames = [environment_positions]
 
-        # Allow specifying a custom path
-        if custom_positions:
-            filenames = [custom_positions]
+        else:
+            # Provide default file locations
+            filenames = [
+                os.path.join(os.getcwd(), "positions.csv"),
+                os.path.join(os.path.dirname(sys.argv[0]), "positions.csv"),
+                os.path.join(os.getcwd(), "../../data/positions.csv"),
+                os.path.join(os.path.dirname(sys.argv[0]), "../../data/positions.csv"),
+            ]
 
         # Resolve relative paths to absolute paths
         filenames = [os.path.abspath(filename) for filename in filenames]
