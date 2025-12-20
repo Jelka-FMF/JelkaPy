@@ -30,7 +30,7 @@ class Path:
 
         for i in range(len(self.durations)):
             if time <= self.durations[i]:
-                # linear interpolation between this and next position component-wise
+                # Linear interpolation between this and next position component-wise
                 t = time / self.durations[i]
                 if i == len(self.positions) - 1:
                     return self.positions[i]

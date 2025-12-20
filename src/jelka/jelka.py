@@ -6,8 +6,10 @@ from typing import Callable, Dict, List, Union
 import jelka_validator.datawriter as dw
 
 from .shapes import Shape
+from .types import AABB
 from .types import Color
 from .types import Position
+from .util import bounds
 
 
 class Jelka:
@@ -38,6 +40,12 @@ class Jelka:
 
         self.positions_normalized: Dict[int, Position] = dict()
         """Normalized positions of the lights."""
+
+        self.bounds_raw: AABB = AABB(0, 0, 0, 0, 0, 0)
+        """Bounds of the tree in raw coordinates."""
+
+        self.bounds_normalized: AABB = AABB(0, 0, 0, 0, 0, 0)
+        """Bounds of the tree in normalized coordinates."""
 
         self.center_raw: Position = Position(0, 0, 0)
         """Center of the tree in raw coordinates."""
@@ -110,10 +118,11 @@ class Jelka:
                     i, x, y, z = line.split(",")
                     self.positions_raw[int(i)] = Position(float(x), float(y), float(z))
 
+                # Calculate the bounds of the tree
+                self.bounds_raw = bounds(self.positions_raw.values())
+
                 # Calculate the center of the tree
-                minz = min([pos.z for pos in self.positions_raw.values()])
-                maxz = max([pos.z for pos in self.positions_raw.values()])
-                self.center_raw = Position(0, 0, (minz + maxz) / 2)
+                self.center_raw = Position(0, 0, (self.bounds_raw.min_z + self.bounds_raw.max_z) / 2)
 
                 return
 
@@ -145,6 +154,10 @@ class Jelka:
             z = (pos.z - mn) / (mx - mn) * (r - l) + l
             self.positions_normalized[i] = Position(x, y, z)
 
+        # Calculate the bounds of the tree
+        self.bounds_normalized = bounds(self.positions_normalized.values())
+
+        # Calculate the center of the tree
         self.center_normalized = Position(
             (self.center_raw.x - mn) / (mx - mn) * (r - l) + l,
             (self.center_raw.y - mn) / (mx - mn) * (r - l) + l,
